@@ -5,7 +5,7 @@ import { useGSAP } from '@gsap/react';
 import { TransitionContext } from '@/context/TransitionContext';
 import gsap from "gsap";
 
-export default function index() {
+export default function Index() {
   const { timeline } = useContext(TransitionContext);
   const container = useRef(null);
   const image = useRef();
