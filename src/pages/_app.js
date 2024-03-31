@@ -6,7 +6,7 @@ import Transition from '@/components/Transition';
 export default function App({ Component, pageProps, router}) {
   return (
     <TransitionProvider>
-      <Header />
+     <Header />
       <Transition>
         <Component key={router.route} {...pageProps} />
       </Transition>

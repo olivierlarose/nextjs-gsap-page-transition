@@ -1,23 +1,33 @@
-import { useState, useContext, useRef } from "react"
+import { useState, useContext } from "react"
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import { TransitionContext } from "@/context/TransitionContext";
-import useIsomorphicLayoutEffect from "../useIsomorphicLayoutEffect";
+gsap.registerPlugin(useGSAP);
 
 export default function TransitionLayout({ children }) {
     const [displayChildren, setDisplayChildren] = useState(children)
     const { timeline } = useContext(TransitionContext);
-    const el = useRef(null);
+    const { contextSafe } = useGSAP(); 
 
-    useIsomorphicLayoutEffect(() => {
+    const exit = contextSafe( () => {
+        timeline.play().then( () => {
+            window.scrollTo(0, 0)
+            setDisplayChildren(children);
+            timeline.pause().clear();
+        })
+    })
+    
+    useGSAP(() => {
         //if page is not the current page
         if (children.key !== displayChildren.key) {
-            timeline.play().then( () => {
-                timeline.pause().clear();
-                window.scrollTo(0, 0)
-                setDisplayChildren(children);
-            })
+            exit();            
         }
 
-    }, [children])
+    }, [children]) 
 
-    return <div ref={el}>{displayChildren}</div>
+    return (
+        <div className="bg-white">
+            {displayChildren}
+        </div>
+    )
 }
